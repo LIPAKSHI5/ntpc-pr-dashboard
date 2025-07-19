@@ -4,3 +4,6 @@ openpyxl
 matplotlib
 seaborn
 scikit-learn
+gunicorn
+numpy
+sqlite3
