@@ -1,12 +1,16 @@
 from flask import Flask, render_template, request, redirect, jsonify, send_file
+from flask_replit import ReplitAuth
 import sqlite3
 import pandas as pd
 from ai_ml_analysis import perform_analysis
+import os
 
 app = Flask(__name__)
+auth = ReplitAuth(app)  # ✅ Correct way to initialize ReplitAuth
+
 DATABASE = 'pr_database.db'
 
-
+# ✅ Initialize database if not exists
 def init_db():
     with sqlite3.connect(DATABASE) as conn:
         conn.execute('''
@@ -42,9 +46,21 @@ def init_db():
 
 @app.route('/', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
+    username = request.headers.get('X-Replit-User-Name')
+    if username:
         return redirect('/user')
-    return render_template('login.html')
+    else:
+        return redirect("/login")
+
+
+@app.route('/login')
+def repl_login():
+    return auth.login()  # ✅ Fixed
+
+
+@app.route('/logout')
+def repl_logout():
+    return auth.logout()  # ✅ Fixed
 
 
 @app.route('/user')
@@ -173,10 +189,7 @@ def kpi_summary():
     })
 
 
-import os
-
-import os
-
 if __name__ == '__main__':
+    init_db()  # ✅ initialize DB before run
     port = int(os.environ.get('PORT', 8000))
     app.run(host='0.0.0.0', port=port)
