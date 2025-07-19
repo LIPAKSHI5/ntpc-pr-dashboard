@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NTPC ADMIN Dashboard</title>
+    <style>
+        body { font-family: Arial; background-color: #eef3f9; padding: 20px; }
+        h1 { color: #b30000; text-align: center; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; background-color: white; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
+        th, td { padding: 10px; border: 1px solid #ccc; font-size: 12px; }
+        th { background-color: #b30000; color: white; font-weight: bold; }
+        .export-button { margin-bottom: 20px; display: block; width: 200px; margin-left: auto; margin-right: auto; padding: 10px; background-color: #b30000; color: white; border: none; cursor: pointer; }
+        .export-button:hover { background-color: #800000; }
+    </style>
+</head>
+<body>
+    <div style="text-align:center; margin-bottom:20px;">
+    <img src="{{ url_for('static', filename='ntpc_logo.png') }}" alt="NTPC Logo" style="max-width: 180px;">
+</div>
+
+
+    <h1>NTPC ADMIN Dashboard (Complete Data)</h1>
+
+    <a href="/export_excel"><button class="export-button">Export to Excel</button></a>
+
+    <table id="prTable">
+        <thead>
+            <tr>
+                <th>PR No</th><th>Material Code</th><th>Material Name</th><th>Material Budget</th><th>Item Text</th>
+                <th>Updated On</th><th>Quantity</th><th>Status</th><th>Name</th><th>Employee ID</th><th>Location</th>
+                <th>Bid No</th><th>BOD</th><th>Remark If Closed</th><th>Result</th><th>PO Number</th><th>Vendor Code</th>
+                <th>Vendor Name</th><th>Vendor Mail ID</th><th>Vendor Contact No</th><th>Delivery Completed</th>
+                <th>Vendor Amount</th><th>Vendor Payment Status</th><th>Initiator</th><th>Visible to User?</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        async function loadAdminData() {
+            const res = await fetch('/api/list_admin');
+            const data = await res.json();
+            const tbody = document.querySelector('#prTable tbody');
+            tbody.innerHTML = '';
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.pr_no}</td><td>${row.material_code}</td><td>${row.material_name}</td><td>${row.material_budget}</td>
+                    <td>${row.item_text}</td><td>${row.updated_on_date}</td><td>${row.quantity}</td><td>${row.status}</td>
+                    <td>${row.name}</td><td>${row.employee_id}</td><td>${row.location}</td><td>${row.bid_no}</td><td>${row.bod}</td>
+                    <td>${row.remark_if_closed}</td><td>${row.result}</td><td>${row.po_number}</td><td>${row.vendor_code}</td>
+                    <td>${row.vendor_name}</td><td>${row.vendor_mail_id}</td><td>${row.vendor_contact_no}</td>
+                    <td>${row.delivery_completed_by_vendor}</td><td>${row.vendor_amount}</td><td>${row.vendor_payment_status}</td>
+                    <td>${row.initiator}</td><td>${row.visible_to_user ? 'YES' : 'NO'}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        loadAdminData();
+    </script>
+</body>
+</html>

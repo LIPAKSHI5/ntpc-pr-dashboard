@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NTPC PR Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef3f9;
+            padding: 30px;
+            color: #333;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #002855;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #004080;
+            padding-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .kpi-cards {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .kpi-card {
+            background: linear-gradient(to bottom right, #004080, #3366cc);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            min-width: 160px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border: 2px solid #002855;
+        }
+
+        .form-section, .filters {
+            background-color: #ffffff;
+            border: 2px solid #004080;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+
+        .form-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .form-section input, .form-section select, .form-section button,
+        .filters input, .filters select, .filters button {
+            padding: 10px;
+            width: 220px;
+            border-radius: 4px;
+            border: 2px solid #004080;
+            font-weight: 600;
+        }
+
+        .form-section button, .filters button {
+            background-color: #004080;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .form-section button:hover, .filters button:hover {
+            background-color: #002855;
+            transform: scale(1.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border: 2px solid #004080;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        th {
+            background-color: #004080;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        td button {
+            padding: 5px 12px;
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        td button:hover {
+            background-color: #990000;
+            transform: scale(1.05);
+        }
+
+        .admin-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        .admin-link a {
+            color: #004080;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .admin-link a:hover {
+            color: #002855;
+            text-decoration: underline;
+        }
+
+        .btn-ai {
+            background-color: #004080;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 20px auto;
+            display: block;
+        }
+
+        .btn-ai:hover {
+            background-color: #002855;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align:center; margin-bottom:20px;">
+    <img src="{{ url_for('static', filename='ntpc_logo.png') }}" alt="NTPC Logo" style="max-width: 180px;">
+</div>
+
+    <h1>NTPC PR DASHBOARD</h1>
+
+    <div class="kpi-cards">
+        <div class="kpi-card" id="totalPRs">Total PRs: 0</div>
+        <div class="kpi-card" id="openPRs">Open PRs: 0</div>
+        <div class="kpi-card" id="closedPRs">Closed PRs: 0</div>
+        <div class="kpi-card" id="totalVendors">Total Vendors: 0</div>
+        <div class="kpi-card" id="totalAmount">Total Amount: ₹0.00</div>
+    </div>
+
+    <h2 style="text-align:center; color:#003366; margin-bottom:10px;">Add PR Entry</h2>
+    <div class="form-section">
+        <input type="text" id="pr_no" placeholder="PR No">
+        <input type="text" id="material_code" placeholder="Material Code">
+        <input type="text" id="material_name" placeholder="Material Name">
+        <input type="text" id="material_budget" placeholder="Material Budget">
+        <input type="text" id="item_text" placeholder="Item Text">
+        <input type="date" id="updated_on_date">
+        <input type="text" id="quantity" placeholder="Quantity">
+        <input type="text" id="status" placeholder="Status">
+        <input type="text" id="name" placeholder="Name">
+        <input type="text" id="employee_id" placeholder="Employee ID">
+        <input type="text" id="location" placeholder="Location">
+        <input type="text" id="bid_no" placeholder="Bid No">
+        <input type="text" id="bod" placeholder="BOD">
+        <input type="text" id="remark_if_closed" placeholder="Remark If Closed">
+        <input type="text" id="result" placeholder="Result">
+        <input type="text" id="po_number" placeholder="PO Number">
+        <input type="text" id="vendor_code" placeholder="Vendor Code">
+        <input type="text" id="vendor_name" placeholder="Vendor Name">
+        <input type="email" id="vendor_mail_id" placeholder="Vendor Mail ID">
+        <input type="text" id="vendor_contact_no" placeholder="Vendor Contact No">
+        <input type="text" id="delivery_completed_by_vendor" placeholder="Delivery Completed by Vendor">
+        <input type="text" id="vendor_amount" placeholder="Vendor Amount">
+        <input type="text" id="vendor_payment_status" placeholder="Vendor Payment Status">
+        <input type="text" id="initiator" placeholder="Initiator">
+        <button onclick="addEntry()">Add Entry</button>
+    </div>
+
+    <button class="btn-ai" onclick="window.location.href='/live_analysis'">View AI/ML Predictions</button>
+
+    <h2 style="text-align:center; color:#003366; margin-bottom:10px;">Filter and Export PR Data</h2>
+    <div class="filters">
+        <input type="text" id="searchPR" placeholder="Search PR No">
+        <input type="text" id="searchEmp" placeholder="Search Employee ID">
+        <input type="text" id="searchVendor" placeholder="Search Vendor Name">
+        <select id="filterStatus">
+            <option value="">Filter by Status</option>
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option>
+            <option value="Pending">Pending</option>
+        </select>
+        <a href="/export_excel"><button>Export to Excel</button></a>
+    </div>
+
+    <table id="prTable">
+        <thead>
+            <tr>
+                <th>PR No</th><th>Material Code</th><th>Material Name</th><th>Material Budget</th><th>Item Text</th><th>Updated On</th>
+                <th>Quantity</th><th>Status</th><th>Name</th><th>Employee ID</th><th>Location</th><th>Bid No</th><th>BOD</th><th>Remark If Closed</th>
+                <th>Result</th><th>PO Number</th><th>Vendor Code</th><th>Vendor Name</th><th>Vendor Mail ID</th><th>Vendor Contact No</th>
+                <th>Delivery Completed</th><th>Vendor Amount</th><th>Vendor Payment Status</th><th>Initiator</th><th>Action</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <div class="admin-link">
+        <a href="/admin">Admin View (All Records)</a>
+    </div>
+
+    <script>
+        async function loadKpis() {
+            const res = await fetch('/api/kpi_summary');
+            const data = await res.json();
+            document.getElementById('totalPRs').innerText = `Total PRs: ${data.total_prs}`;
+            document.getElementById('openPRs').innerText = `Open PRs: ${data.open_prs}`;
+            document.getElementById('closedPRs').innerText = `Closed PRs: ${data.closed_prs}`;
+            document.getElementById('totalVendors').innerText = `Total Vendors: ${data.total_vendors}`;
+            document.getElementById('totalAmount').innerText = `Total Amount: ${data.total_amount}`;
+        }
+
+        async function loadData() {
+            const res = await fetch('/api/list');
+            const data = await res.json();
+            const tbody = document.querySelector('#prTable tbody');
+            tbody.innerHTML = '';
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${row.pr_no}</td><td>${row.material_code}</td><td>${row.material_name}</td><td>${row.material_budget}</td>
+                    <td>${row.item_text}</td><td>${row.updated_on_date}</td><td>${row.quantity}</td><td>${row.status}</td>
+                    <td>${row.name}</td><td>${row.employee_id}</td><td>${row.location}</td><td>${row.bid_no}</td>
+                    <td>${row.bod}</td><td>${row.remark_if_closed}</td><td>${row.result}</td><td>${row.po_number}</td>
+                    <td>${row.vendor_code}</td><td>${row.vendor_name}</td><td>${row.vendor_mail_id}</td><td>${row.vendor_contact_no}</td>
+                    <td>${row.delivery_completed_by_vendor}</td><td>${row.vendor_amount}</td><td>${row.vendor_payment_status}</td><td>${row.initiator}</td>
+                    <td><button onclick="deleteEntry('${row.pr_no}','${row.material_code}')">Delete</button></td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterTable() {
+            const pr = document.getElementById('searchPR').value.toLowerCase();
+            const emp = document.getElementById('searchEmp').value.toLowerCase();
+            const vendor = document.getElementById('searchVendor').value.toLowerCase();
+            const status = document.getElementById('filterStatus').value.toLowerCase();
+
+            document.querySelectorAll('#prTable tbody tr').forEach(row => {
+                const prText = row.children[0].textContent.toLowerCase();
+                const empText = row.children[9].textContent.toLowerCase();
+                const vendorText = row.children[17].textContent.toLowerCase();
+                const statusText = row.children[7].textContent.toLowerCase();
+
+                const match =
+                    (!pr || prText.includes(pr)) &&
+                    (!emp || empText.includes(emp)) &&
+                    (!vendor || vendorText.includes(vendor)) &&
+                    (!status || statusText === status);
+
+                row.style.display = match ? '' : 'none';
+            });
+        }
+
+        async function addEntry() {
+            const fields = ["pr_no", "material_code", "material_name", "material_budget", "item_text",
+                            "updated_on_date", "quantity", "status", "name", "employee_id",
+                            "location", "bid_no", "bod", "remark_if_closed", "result",
+                            "po_number", "vendor_code", "vendor_name", "vendor_mail_id", "vendor_contact_no",
+                            "delivery_completed_by_vendor", "vendor_amount", "vendor_payment_status", "initiator"];
+            const data = {};
+            fields.forEach(id => data[id] = document.getElementById(id).value);
+
+            await fetch('/api/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+
+            fields.forEach(id => document.getElementById(id).value = '');
+            loadData();
+            loadKpis();
+        }
+
+        async function deleteEntry(prNo, materialCode) {
+            await fetch('/api/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ pr_no: prNo, material_code: materialCode })
+            });
+            loadData();
+            loadKpis();
+        }
+
+        document.getElementById('searchPR').addEventListener('input', filterTable);
+        document.getElementById('searchEmp').addEventListener('input', filterTable);
+        document.getElementById('searchVendor').addEventListener('input', filterTable);
+        document.getElementById('filterStatus').addEventListener('change', filterTable);
+
+        loadKpis();
+        loadData();
+    </script>
+</body>
+</html>
+
+
