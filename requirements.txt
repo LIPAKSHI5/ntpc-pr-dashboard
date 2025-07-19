@@ -1,9 +1,6 @@
-Flask
+Flask==2.3.2
 pandas
-openpyxl
-matplotlib
-seaborn
+numpy==1.24.4
 scikit-learn
+openpyxl
 gunicorn
-numpy
-sqlite3
